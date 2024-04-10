@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: dev-mysql
+    image: mysql:latest
+    # command: --default-authentication-plugin=mysql_native_password
+    command: --default-authentication-plugin=caching_sha2_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: dev
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - dev-pg:/var/lib/mysql
+      - ./mysql-conf/certs.conf:/etc/mysql/conf.d/certs.conf
+      - ./mysql-conf/certs:/etc/mysql/certs
+    ports:
+      - 3306:3306
+    networks:
+      - bridge
+
+volumes:
+  dev-pg:
+
+networks:
+  bridge:
+    name: bridge
+    external: true
